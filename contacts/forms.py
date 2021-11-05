@@ -7,6 +7,7 @@ class ContactForm(forms.ModelForm):
         model = Contact
         fields = [
             'name',
+            'birthdate',
             'address_1',
             'address_2',
             'city',
@@ -15,3 +16,12 @@ class ContactForm(forms.ModelForm):
             'phone_number',
             'email',
         ]
+class Noteform(forms.Modelform):
+    class Meta:
+        Model = Note
+        fields = [
+            'text'
+        ]
+        labels = {
+            "text": "Add Note:"
+        }       

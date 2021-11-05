@@ -46,3 +46,36 @@ def delete_contact(request, pk):
 
     return render(request, "contacts/delete_contact.html",
                   {"contact": contact})
+
+
+def view_contact(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+    notes = Note.objects.filter(contact_id=pk)
+    if request.method == 'GET':
+        form = NoteForm()
+    else:
+        form = NoteForm(data=request.POST)
+        if form.is_valid():
+            form.instance.contact_id = pk
+            form.save()
+            return redirect(to='view_contact', pk=pk)
+    return render(request, "contacts/view_contact.html", {"contact": contact, "notes": notes, 'form': form })
+
+def view_notes(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+    notes = Note.objects.filter(contact_id=pk)
+    return render(request, "contacts/view_contact.html",
+                  {"contact": contact, "notes": notes})
+
+
+def add_contact(request):
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(to='list_contacts')
+
+    return render(request, "contacts/add_contact.html", {"form": form})
+                  
